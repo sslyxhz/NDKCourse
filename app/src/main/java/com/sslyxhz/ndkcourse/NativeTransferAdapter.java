@@ -5,15 +5,21 @@ import java.util.List;
 /**
  * Created by xh.zeng on 2017/7/16.
  *
- * 参数传递
+ * Native参数传递
  */
 
 public class NativeTransferAdapter {
 
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
+    public static String testTransfer(){
+        NativeTransferAdapter nativeAdapter = new NativeTransferAdapter();
+        StringBuffer results = new StringBuffer();
+        results.append("basicTypeDataFromJNI() = "+ nativeAdapter.basicTypeDataFromJNI()+"\n");
+        results.append("basicRefDataFromJNI() = "+ nativeAdapter.basicRefDataFromJNI()+"\n");
+        results.append("arrayRefDataFromJNI() = "+ nativeAdapter.arrayRefDataFromJNI()+"\n");
+        results.append("customTypeDataFromJNI() = "+ nativeAdapter.customTypeDataFromJNI()+"\n");
+        results.append("listDataFromJNI().get(2) = "+ nativeAdapter.listDataFromJNI().get(2)+"\n");
+        return results.toString();
+    }
 
     /**
      * 返回基础类型数据
