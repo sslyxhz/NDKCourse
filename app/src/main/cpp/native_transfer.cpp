@@ -8,6 +8,12 @@
 
 extern "C"
 JNIEXPORT jint JNICALL
+/**
+ * native返回基本数据类型
+ * @param env
+ * @param instance
+ * @return jint
+ */
 Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_basicTypeDataFromJNI(JNIEnv *env, jobject instance) {
 //    printf("pthread_self()=%d", pthread_self());
     jint result = 123;
@@ -16,6 +22,12 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_basicTypeDataFromJNI(JNIEnv *en
 
 extern "C"
 JNIEXPORT jstring JNICALL
+/**
+ * native返回基本引用类型
+ * @param env
+ * @param instance
+ * @return jstring
+ */
 Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_basicRefDataFromJNI(JNIEnv *env, jobject instance) {
     jstring result = env->NewStringUTF("Hello from JNI 666");
     return result;
@@ -23,6 +35,12 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_basicRefDataFromJNI(JNIEnv *env
 
 extern "C"
 JNIEXPORT jobjectArray JNICALL
+/**
+ * native返回数组类型
+ * @param env
+ * @param instance
+ * @return jobjectArray
+ */
 Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_arrayRefDataFromJNI(JNIEnv *env, jobject instance) {
     jobjectArray result = 0;
     jsize len = 3;
@@ -38,6 +56,12 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_arrayRefDataFromJNI(JNIEnv *env
 
 extern "C"
 JNIEXPORT jobject JNICALL
+/**
+ * native返回自定义类型
+ * @param env
+ * @param instance
+ * @return jobject
+ */
 Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_customTypeDataFromJNI(JNIEnv *env, jobject instance) {
     jclass cls = env->FindClass("com/sslyxhz/ndkcourse/RefData");
     jmethodID initMid = env->GetMethodID(cls, "<init>", "()V");
@@ -53,6 +77,12 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_customTypeDataFromJNI(JNIEnv *e
 
 extern "C"
 JNIEXPORT jobject JNICALL
+/**
+ * native返回List类型
+ * @param env
+ * @param instance
+ * @return jobject
+ */
 Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_listDataFromJNI(JNIEnv *env, jobject instance) {
     jclass list_cls = env->FindClass("java/util/ArrayList");
     if(list_cls == NULL){
@@ -71,4 +101,14 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_listDataFromJNI(JNIEnv *env, jo
         env->CallBooleanMethod(list_obj, add_list_mid, testRefData);
     }
     return list_obj;
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_dealWithParam(JNIEnv *env, jobject instance, jstring param_) {
+    const char *param = env->GetStringUTFChars(param_, 0);
+
+    env->ReleaseStringUTFChars(param_, param);
+
+    return env->NewStringUTF("Deal by jni..");
 }

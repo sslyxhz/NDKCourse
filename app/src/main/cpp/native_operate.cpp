@@ -7,6 +7,7 @@
 #include <android/log.h>
 #include "native_operate.h"
 
+
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_sslyxhz_ndkcourse_NativeOperateAdapter_testJNIMethod(JNIEnv *env, jobject instance) {
@@ -15,6 +16,12 @@ Java_com_sslyxhz_ndkcourse_NativeOperateAdapter_testJNIMethod(JNIEnv *env, jobje
 
 extern "C"
 JNIEXPORT jint JNICALL
+/**
+ * native调用Java非静态方法
+ * @param env
+ * @param instance
+ * @return
+ */
 Java_com_sslyxhz_ndkcourse_NativeOperateAdapter_nativeCallJavaNonStaticMethod(JNIEnv *env, jobject instance) {
     jclass cls = env->FindClass("com/sslyxhz/ndkcourse/NativeOperateAdapter");
     jmethodID init_mid = env->GetMethodID(cls, "<init>", "()V");
@@ -34,6 +41,12 @@ Java_com_sslyxhz_ndkcourse_NativeOperateAdapter_nativeCallJavaNonStaticMethod(JN
 
 extern "C"
 JNIEXPORT jint JNICALL
+/**
+ * native调用静态方法
+ * @param env
+ * @param instance
+ * @return
+ */
 Java_com_sslyxhz_ndkcourse_NativeOperateAdapter_nativeCallJavaStaticMethod(JNIEnv *env, jobject instance) {
     jclass cls = env->FindClass("com/sslyxhz/ndkcourse/NativeOperateAdapter");
     jmethodID static_mid = env->GetStaticMethodID(cls, "javaStaticMethod", "(Ljava/lang/String;)Ljava/lang/String;");

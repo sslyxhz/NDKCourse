@@ -22,12 +22,17 @@ add_library( # Sets the name of the library.
 add_library( native-transfer
              SHARED
              src/main/cpp/native_transfer.cpp
-              src/main/cpp/native_transfer.h)
+             src/main/cpp/native_transfer.h)
 
 add_library( native-operate
              SHARED
              src/main/cpp/native_operate.cpp
-              src/main/cpp/native_operate.h)
+             src/main/cpp/native_operate.h)
+
+add_library( native-threads
+             SHARED
+             src/main/cpp/native_threads.cpp
+             src/main/cpp/native_threads.h)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -50,6 +55,7 @@ target_link_libraries( # Specifies the target library.
                        native-lib
                        native-transfer
                        native-operate
+                       native-threads
 
                        # Links the target library to the log library
                        # included in the NDK.

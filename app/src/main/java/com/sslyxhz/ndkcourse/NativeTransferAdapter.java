@@ -52,6 +52,7 @@ public class NativeTransferAdapter {
     public native List<RefData> listDataFromJNI();
 
 
+    public native String dealWithParam(String param);
 
     // Used to load the 'native-lib' library on application startup.
     static {
