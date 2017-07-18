@@ -31,7 +31,6 @@ public class NativeOperateAdapter {
         return "OK";
     }
 
-    public native void testJNIMethod();
     public native int nativeCallJavaNonStaticMethod();
     public native int nativeCallJavaStaticMethod();
 

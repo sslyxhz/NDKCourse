@@ -52,7 +52,14 @@ public class NativeTransferAdapter {
     public native List<RefData> listDataFromJNI();
 
 
-    public native String dealWithParam(String param);
+    /**
+     * 传递基本数据类型
+     * @param param
+     * @return
+     */
+    public native String passBasicTypeData(String param);
+
+    public native String passCustomTypeData(RefData param);
 
     // Used to load the 'native-lib' library on application startup.
     static {
