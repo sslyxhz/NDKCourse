@@ -8,12 +8,6 @@
 #include "native_operate.h"
 
 extern "C"
-JNIEXPORT void JNICALL
-Java_com_sslyxhz_ndkcourse_NativeOperateAdapter_testJNIMethod(JNIEnv *env, jobject instance) {
-
-}
-
-extern "C"
 JNIEXPORT jint JNICALL
 /**
  * native调用Java非静态方法
