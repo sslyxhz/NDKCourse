@@ -7,7 +7,6 @@
 #include <android/log.h>
 #include "native_operate.h"
 
-
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_sslyxhz_ndkcourse_NativeOperateAdapter_testJNIMethod(JNIEnv *env, jobject instance) {

@@ -19,8 +19,8 @@ public class MainActivity extends AppCompatActivity {
         showText.append(NativeOperateAdapter.testOperate());
 
         tv.setText(showText.toString());
+
+        NativeThreadsAdapter.testThreads();
     }
-
-
 
 }

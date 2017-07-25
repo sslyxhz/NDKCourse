@@ -10,5 +10,4 @@ class native_threads {
 
 };
 
-
 #endif //NDKCOURSE_NATIVE_THREADS_H

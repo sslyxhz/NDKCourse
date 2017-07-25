@@ -19,20 +19,29 @@ add_library( # Sets the name of the library.
              # Provides a relative path to your source file(s).
              src/main/cpp/native-lib.cpp )
 
-add_library( native-transfer
-             SHARED
-             src/main/cpp/native_transfer.cpp
-             src/main/cpp/native_transfer.h)
+add_library( # Sets the name of the library.
+             native-transfer
 
-add_library( native-operate
              SHARED
-             src/main/cpp/native_operate.cpp
-             src/main/cpp/native_operate.h)
 
-add_library( native-threads
+             src/main/cpp/native_transfer.h
+             src/main/cpp/native_transfer.cpp)
+
+add_library( # Sets the name of the library.
+             native-operate
+
              SHARED
-             src/main/cpp/native_threads.cpp
-             src/main/cpp/native_threads.h)
+
+             src/main/cpp/native_operate.h
+             src/main/cpp/native_operate.cpp)
+
+add_library( # Sets the name of the library.
+             native-threads
+
+             SHARED
+
+             src/main/cpp/native_threads.h
+             src/main/cpp/native_threads.cpp)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -53,8 +62,26 @@ find_library( # Sets the name of the path variable.
 
 target_link_libraries( # Specifies the target library.
                        native-lib
+
+                       # Links the target library to the log library
+                       # included in the NDK.
+                       ${log-lib} )
+
+target_link_libraries( # Specifies the target library.
                        native-transfer
+
+                       # Links the target library to the log library
+                       # included in the NDK.
+                       ${log-lib} )
+
+target_link_libraries( # Specifies the target library.
                        native-operate
+
+                       # Links the target library to the log library
+                       # included in the NDK.
+                       ${log-lib} )
+
+target_link_libraries( # Specifies the target library.
                        native-threads
 
                        # Links the target library to the log library
