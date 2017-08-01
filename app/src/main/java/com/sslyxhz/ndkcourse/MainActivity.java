@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
         tv.setText(showText.toString());
 
         NativeThreadsAdapter.testThreads();
+
+        NativeRegisterAdapter.testRegister();
     }
 
 }
