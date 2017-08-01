@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         showText.append(NativeTransferAdapter.testTransfer());
         showText.append("\n");
         showText.append(NativeOperateAdapter.testOperate());
-
+        showText.append("\n");
         tv.setText(showText.toString());
 
         NativeThreadsAdapter.testThreads();

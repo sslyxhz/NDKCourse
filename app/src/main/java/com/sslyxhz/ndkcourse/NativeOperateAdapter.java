@@ -5,7 +5,7 @@ import android.util.Log;
 /**
  * Created by xh.zeng on 2017/7/16.
  *
- * Native操作
+ * Native操作，调用上层静态方法和非静态方法
  */
 
 public class NativeOperateAdapter {
@@ -34,7 +34,6 @@ public class NativeOperateAdapter {
     public native int nativeCallJavaNonStaticMethod();
     public native int nativeCallJavaStaticMethod();
 
-    // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-operate");
     }

@@ -59,9 +59,13 @@ public class NativeTransferAdapter {
      */
     public native String passBasicTypeData(String param);
 
+    /**
+     * 传递自定义数据类型
+     * @param param
+     * @return
+     */
     public native String passCustomTypeData(RefData param);
 
-    // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-transfer");
     }

@@ -54,28 +54,31 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_sslyxhz_ndkcourse_NativeThreadsAdapter_setJNIEnv(JNIEnv *env, jobject instance) {
     LOGI("**** Java call setJNIEnv, TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
-    env->GetJavaVM(&g_jvm); //保存全局JVM以便在子线程中使用
+    env->GetJavaVM(&g_jvm);         //保存全局JVM以便在子线程中使用
     g_instance = env->NewGlobalRef(instance);
 
     if(env->FindClass("com/sslyxhz/ndkcourse/JNINeedTestClass") == NULL) {
         LOGE("**** OnLoad FindClass() Error.....");
     } else{
-        g_testClass = env->NewGlobalRef((jobject)env->FindClass("com/xhz/ndkcourse/JniNeedTestClass"));
+        jclass testClass = env->FindClass("com/sslyxhz/ndkcourse/JNINeedTestClass");
+        g_testClass = env->NewGlobalRef((jobject)testClass);
+        env->DeleteLocalRef(testClass);
     }
 }
 
 extern "C"
 void *thread_callStaticFun(void *arg) {
+    LOGI("**** jni child thread, callStaticFun, TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
     JNIEnv *env;
     jclass cls;
     jmethodID staticMid;
 
-    LOGI("**** jni child thread, callStaticFun, before attach TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
+//    LOGI("**** jni child thread, callStaticFun, before attach TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
     if(g_jvm->AttachCurrentThread( &env, NULL) != JNI_OK) {
         LOGE("**** %s: AttachCurrentThread() failed", __FUNCTION__);
         return NULL;
     }
-    LOGI("**** jni child thread, callStaticFun, after attach TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
+//    LOGI("**** jni child thread, callStaticFun, after attach TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
 
     cls = env->GetObjectClass(g_instance);
     if(cls == NULL) {
@@ -100,19 +103,20 @@ void *thread_callStaticFun(void *arg) {
 
 extern "C"
 void *thread_callNonStaticFun(void *arg) {
+    LOGI("**** jni child thread, callNonStaticFun, TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
     JNIEnv *env;
     jclass cls;
     jmethodID ctor, mid;
     jobject obj;
 
-    LOGI("**** jni child thread, callNonStaticFun, before attach TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
+//    LOGI("**** jni child thread, callNonStaticFun, before attach TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
     if(g_jvm->AttachCurrentThread( &env, NULL) != JNI_OK) {
         LOGE("%s: AttachCurrentThread() failed", __FUNCTION__);
         return NULL;
     }
-    LOGI("**** jni child thread, callNonStaticFun, after attach TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
+//    LOGI("**** jni child thread, callNonStaticFun, after attach TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
 
-//    cls = env->FindClass("com/xhz/ndkcourse/JniNeedTestClass");   // 找不到这个类，放在setJNIEnv或OnLoad中加载
+//    cls = env->FindClass("com/sslyxhz/ndkcourse/JNINeedTestClass");   // 找不到这个类，放在setJNIEnv或OnLoad中加载
     cls = (jclass)env->NewLocalRef(g_testClass);
     if(cls == NULL) {
         LOGE("**** jni child thread, FindClass() Error.....");
@@ -142,6 +146,7 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_sslyxhz_ndkcourse_NativeThreadsAdapter_callJNIMethodInMainThread(JNIEnv *env, jobject instance) {
     LOGI("**** Java call callJNIMethodInMainThread, TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
+
     int i = 0;
     pthread_t ptStaticFunc[NUMTHREADS], ptNonStaticFunc[NUMTHREADS];
 

@@ -11,6 +11,7 @@ public class NativeThreadsAdapter {
 
     public static String testThreads(){
         NativeThreadsAdapter nativeAdapter = new NativeThreadsAdapter();
+        nativeAdapter.setJNIEnv();
         nativeAdapter.callJNIMethodInMainThread();
         StringBuffer results = new StringBuffer();
         results.append("callJNIMethodInMainThread() = "+"\n");
