@@ -89,6 +89,63 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_listDataFromJNI(JNIEnv *env, jo
 }
 
 /**
+ * native返回set类型
+ */
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_setDataFromJNI(JNIEnv *env, jobject instance) {
+    jclass hashset_cls = env->FindClass("java/util/HashSet");
+    if(hashset_cls == NULL){
+        return NULL;
+    }
+    jmethodID init_set_mid = env->GetMethodID(hashset_cls, "<init>", "()V");
+    jmethodID add_set_mid = env->GetMethodID(hashset_cls, "add", "(Ljava/lang/Object;)Z");
+    jobject set_obj = env->NewObject(hashset_cls, init_set_mid);
+
+    jclass ref_cls = env->FindClass("com/sslyxhz/ndkcourse/RefData");
+    jmethodID init_ref_mid = env->GetMethodID(ref_cls, "<init>", "(ILjava/lang/String;)V");
+
+    for(int i=0;i<3;++i){
+        jstring testName = env->NewStringUTF("TestName");
+        jobject testRefData = env->NewObject(ref_cls, init_ref_mid, i, testName);
+        env->CallBooleanMethod(set_obj, add_set_mid, testRefData);
+    }
+    return set_obj;
+}
+
+/**
+ * native返回map类型
+ */
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_mapDataFromJNI(JNIEnv *env, jobject instance) {
+    jclass hashMapClass = env->FindClass("java/util/HashMap");
+    if(hashMapClass == NULL){
+        return NULL;
+    }
+    jmethodID init_map_mid = env->GetMethodID(hashMapClass, "<init>", "()V");
+    jmethodID put_map_mid = env->GetMethodID(hashMapClass, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
+    jobject map_obj = env->NewObject(hashMapClass, init_map_mid);
+
+    jclass ref_cls = env->FindClass("com/sslyxhz/ndkcourse/RefData");
+    jmethodID init_ref_mid = env->GetMethodID(ref_cls, "<init>", "(ILjava/lang/String;)V");
+    jclass long_cls = env->FindClass("java/lang/Long");
+    jmethodID longInitMethod = env->GetStaticMethodID(long_cls, "valueOf", "(J)Ljava/lang/Long;");
+
+    for(int i=0;i<3;++i){
+        jstring testName = env->NewStringUTF("TestName");
+        jobject testRefData = env->NewObject(ref_cls, init_ref_mid, i, testName);
+        jobject testData = env->CallStaticObjectMethod(long_cls, longInitMethod, i);
+        env->CallObjectMethod(map_obj, put_map_mid, testRefData, testData);
+
+        env->DeleteLocalRef(testRefData);
+        env->DeleteLocalRef(testData);
+    }
+
+    return map_obj;
+}
+
+/**
  * 传递基本类型数据
  */
 extern "C"

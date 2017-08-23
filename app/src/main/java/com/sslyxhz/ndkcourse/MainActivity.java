@@ -1,7 +1,7 @@
 package com.sslyxhz.ndkcourse;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,13 +16,13 @@ public class MainActivity extends AppCompatActivity {
         StringBuffer showText = new StringBuffer();
         showText.append(NativeTransferAdapter.testTransfer());
         showText.append("\n");
-        showText.append(NativeOperateAdapter.testOperate());
-        showText.append("\n");
+//        showText.append(NativeOperateAdapter.testOperate());
+//        showText.append("\n");
         tv.setText(showText.toString());
 
-        NativeThreadsAdapter.testThreads();
+//        NativeThreadsAdapter.testThreads();
 
-        NativeRegisterAdapter.testRegister();
+//        NativeRegisterAdapter.testRegister();
     }
 
 }

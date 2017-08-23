@@ -33,6 +33,33 @@ public class RefData {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if(this == obj){
+            return true;
+        }
+        if(obj == null || obj.getClass() != getClass()) {
+            return false;
+        }
+        final RefData otherData = (RefData) obj;
+        if(this.id != otherData.id){
+            return false;
+        }
+        if(this.name != null && this.name.equals(otherData.name)){
+            return true;
+        }
+        if(this.name == null && otherData.name == null){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result =0;
+        return result * 31 + id;
+    }
+
+    @Override
     public String toString() {
         return "(id = "+id+"; name = "+name+")";
     }
