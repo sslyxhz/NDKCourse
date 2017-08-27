@@ -45,6 +45,11 @@ add_library( native-costtime
              src/main/cpp/native_costtime.h
              src/main/cpp/native_costtime.cpp)
 
+add_library( native-media
+             SHARED
+             src/main/cpp/native_media.h
+             src/main/cpp/native_media.cpp)
+
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
 # default, you only need to specify the name of the public NDK library
@@ -82,4 +87,7 @@ target_link_libraries( native-register
                        ${log-lib} )
 
 target_link_libraries( native-costtime
+                       ${log-lib} )
+
+target_link_libraries( native-media
                        ${log-lib} )
