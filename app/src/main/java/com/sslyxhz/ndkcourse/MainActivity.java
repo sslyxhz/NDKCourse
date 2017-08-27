@@ -6,23 +6,43 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    TextView tv;
+    StringBuffer showText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TextView tv = (TextView) findViewById(R.id.sample_text);
+        tv = (TextView) findViewById(R.id.sample_text);
 
-        StringBuffer showText = new StringBuffer();
-        showText.append(NativeTransferAdapter.testTransfer());
-        showText.append("\n");
-//        showText.append(NativeOperateAdapter.testOperate());
-//        showText.append("\n");
-        tv.setText(showText.toString());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                showText = new StringBuffer();
+//                showText.append(NativeTransferAdapter.testTransfer());
+//                showText.append("\n");
+//
+//                showText.append(NativeOperateAdapter.testOperate());
+//                showText.append("\n");
 
-//        NativeThreadsAdapter.testThreads();
+                showText.append(NativeCostTimeAdapter.testCostTime());
+                showText.append("\n");
 
-//        NativeRegisterAdapter.testRegister();
+                tv.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        tv.setText(showText.toString());
+                    }
+                });
+
+//                NativeThreadsAdapter.testThreads();
+//
+//                NativeRegisterAdapter.testRegister();
+            }
+        }).start();
+
+
     }
 
 }
