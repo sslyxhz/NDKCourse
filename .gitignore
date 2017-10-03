@@ -8,3 +8,8 @@
 /captures
 .externalNativeBuild
 /.idea/
+.project
+.settings/
+app/.classpath
+app/.project
+app/.settings/
