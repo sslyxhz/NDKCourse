@@ -6,12 +6,9 @@
 #include <string>
 #include <pthread.h>
 #include <sys/syscall.h>
-#include <android/log.h>
 #include "native_threads.h"
+#include "logger.h"
 
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-threads", __VA_ARGS__))
-#define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "native-threads", __VA_ARGS__))
-#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "native-threads", __VA_ARGS__))
 
 #define NUMTHREADS 1
 

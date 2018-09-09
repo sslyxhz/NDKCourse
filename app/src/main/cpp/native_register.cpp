@@ -5,13 +5,9 @@
 
 #include <jni.h>
 #include <string>
-#include <android/log.h>
+#include "logger.h"
 #include <sys/syscall.h>
 #include "native_register.h"
-
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-threads", __VA_ARGS__))
-#define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "native-threads", __VA_ARGS__))
-#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "native-threads", __VA_ARGS__))
 
 jclass g_registerAdapter;
 

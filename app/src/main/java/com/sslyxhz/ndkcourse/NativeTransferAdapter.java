@@ -14,26 +14,39 @@ public class NativeTransferAdapter {
     public static String testTransfer(){
         NativeTransferAdapter nativeAdapter = new NativeTransferAdapter();
         StringBuffer results = new StringBuffer();
-        results.append("getIntData() = "+ nativeAdapter.getIntData()+"\n");
-        results.append("getByteData() = "+ nativeAdapter.getByteData()+"\n");
-//        results.append("getByteArrayData().length = "+ nativeAdapter.getByteArrayData().length+"\n");
-        results.append("getStringData() = "+ nativeAdapter.getStringData()+"\n");
+
+        results.append("getIntData() = "+ nativeAdapter.getIntData(233)+"\n");
+
+        results.append("getIntByteArraysData().length = "+ nativeAdapter.getIntByteArraysData(new int[][]{{1,2},{3,4}}).length+"\n");
+
+        results.append("getByteData() = "+ nativeAdapter.getByteData((byte) 'a')+"\n");
+
+        results.append("getByteArrayData().length = "+ nativeAdapter.getByteArrayData(new byte[]{'a', 'b', 'c'}).length+"\n");
+
+        results.append("getStringData() = "+ nativeAdapter.getStringData("HelloWorld")+"\n");
+
         results.append("getArrayRefData().length = "+ nativeAdapter.getArrayRefData().length+"\n");
+
         results.append("getRefData() = "+ nativeAdapter.getRefData()+"\n");
+
         results.append("getListData().get(2) = "+ nativeAdapter.getListData().get(2)+"\n");
+
         results.append("getSetData().size() = "+ nativeAdapter.getSetData().size()+"\n");
+
         results.append("getMapData().size() = "+ nativeAdapter.getMapData().size()+"\n");
 
         return results.toString();
     }
 
-    public native int getIntData();
+    public native int getIntData(int param);
 
-    public native byte getByteData();
+    public native int[][] getIntByteArraysData(int[][] param);
 
-    public native byte[] getByteArrayData();
+    public native byte getByteData(byte param);
 
-    public native String getStringData();
+    public native byte[] getByteArrayData(byte[] param);
+
+    public native String getStringData(String param);
 
     public native String[] getArrayRefData();
 

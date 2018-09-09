@@ -5,14 +5,8 @@
 #include <jni.h>
 #include <string>
 #include <sys/time.h>
-#include <android/log.h>
+#include "logger.h"
 #include "native_costtime.h"
-
-#ifndef  LOG_TAG
-#define  LOG_TAG    "jni costtime"
-#define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
-#endif
 
 long getCurrentTime();
 void jni2jniVoid();

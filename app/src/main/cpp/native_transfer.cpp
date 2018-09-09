@@ -5,29 +5,72 @@
 #include <jni.h>
 #include <string>
 #include "native_transfer.h"
+#include "logger.h"
+
+//#define LOG_TAG "native_transfer"
 
 /**
  * native返回基本数据类型
  */
 extern "C"
 JNIEXPORT jint JNICALL
-Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getIntData(JNIEnv *env, jobject instance) {
-//    printf("pthread_self()=%d", pthread_self());
-    jint result = 123;
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getIntData(JNIEnv *env, jobject instance, jint param) {
+    LOGI("getIntData, param:%d", param);
+    jint result = param + 1;
     return result;
 }
 
+
+extern "C"
+JNIEXPORT jobjectArray JNICALL
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getIntByteArraysData(JNIEnv *env, jobject instance, jobjectArray param) {
+    jint rows = env->GetArrayLength(param);
+    for(int i=0;i<rows; ++i) {
+        jintArray rowArray = (jintArray) env->GetObjectArrayElement(param, i);
+        int cols = env->GetArrayLength(rowArray);
+        for(int j=0; j<cols; ++j){
+            jint value = env->GetIntArrayElements(rowArray, 0)[j];
+            LOGI("getIntByteArraysData, param : <%d, %d> = %d", i, j, value);
+        }
+    }
+
+    int size = 3;
+    jclass intArrayClass = env->FindClass("[I");
+    jobjectArray result = env->NewObjectArray(size,intArrayClass, NULL);
+
+    for(int i=0;i<size;i++){
+        jintArray rowArray = env->NewIntArray(size);
+        jint tempArray[size];
+        for(int j=0;j<size;j++){
+            tempArray[j]=i+j;
+        }
+        env->SetIntArrayRegion(rowArray,0,size,tempArray);
+
+        env->SetObjectArrayElement(result,i,rowArray);
+
+        env->DeleteLocalRef(rowArray);
+    }
+    env->DeleteLocalRef(intArrayClass);
+
+    return result;
+}
+
+
 extern "C"
 JNIEXPORT jbyte JNICALL
-Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getByteData(JNIEnv *env, jobject instance) {
-    jbyte result = 'a';
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getByteData(JNIEnv *env, jobject instance, jbyte param) {
+    LOGI("getByteData, param:%c", param);
+
+    jbyte result = (jbyte) (param+1);
     return result;
 }
 
 extern "C"
 JNIEXPORT jbyteArray JNICALL
-Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getByteArrayData(JNIEnv *env, jobject instance) {
-    jbyteArray result;
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getByteArrayData(JNIEnv *env, jobject instance, jbyteArray param) {
+    jbyteArray result = param;
+
+
     return result;
 }
 
@@ -36,7 +79,9 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getByteArrayData(JNIEnv *env, j
  */
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getStringData(JNIEnv *env, jobject instance) {
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getStringData(JNIEnv *env, jobject instance, jstring param) {
+
+
     jstring result = env->NewStringUTF("Hello from JNI 666");
     return result;
 }

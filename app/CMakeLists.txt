@@ -19,6 +19,12 @@ add_library( # Sets the name of the library.
              # Provides a relative path to your source file(s).
              src/main/cpp/native-lib.cpp )
 
+
+add_library( native-logger
+             SHARED
+             src/main/cpp/logger.h
+             src/main/cpp/logger.cpp)
+
 add_library( native-transfer
              SHARED
              src/main/cpp/native_transfer.h
@@ -74,20 +80,23 @@ target_link_libraries( # Specifies the target library.
                        # included in the NDK.
                        ${log-lib} )
 
-target_link_libraries( native-transfer
+target_link_libraries( native-logger
                        ${log-lib} )
+
+target_link_libraries( native-transfer
+                       native-logger )
 
 target_link_libraries( native-operate
-                       ${log-lib} )
+                       native-logger )
 
 target_link_libraries( native-threads
-                       ${log-lib} )
+                       native-logger )
 
 target_link_libraries( native-register
-                       ${log-lib} )
+                       native-logger )
 
 target_link_libraries( native-costtime
-                       ${log-lib} )
+                       native-logger )
 
 target_link_libraries( native-media
-                       ${log-lib} )
+                       native-logger )
