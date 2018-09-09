@@ -24,7 +24,7 @@ Java_com_sslyxhz_ndkcourse_NativeOperateAdapter_nativeCallJavaNonStaticMethod(JN
     jstring param = env->NewStringUTF("native params 2333.");
     if(non_static_mid){
         jstring result = (jstring)env->CallObjectMethod(objAdapter, non_static_mid, param);
-        const char* charsResults = env->GetStringUTFChars(result, false);
+        const char* charsResults = env->GetStringUTFChars(result, 0);
 //        __android_log_print(ANDROID_LOG_DEBUG, "native_operate->nativeCallJavaNonStaticMethod", charsResults);
         return 1;
     } else{

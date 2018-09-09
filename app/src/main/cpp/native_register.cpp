@@ -54,5 +54,5 @@ JNI_UnLoad(JavaVM *vm, void *reserved) {
 }
 
 void native_testRegisterMethod(JNIEnv *env, jobject instance) {
-    LOGI("****  call native_testRegisterMethod, TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
+//    LOGI("****  call native_testRegisterMethod, TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
 }

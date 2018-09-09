@@ -11,9 +11,23 @@
  */
 extern "C"
 JNIEXPORT jint JNICALL
-Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_basicTypeDataFromJNI(JNIEnv *env, jobject instance) {
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getIntData(JNIEnv *env, jobject instance) {
 //    printf("pthread_self()=%d", pthread_self());
     jint result = 123;
+    return result;
+}
+
+extern "C"
+JNIEXPORT jbyte JNICALL
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getByteData(JNIEnv *env, jobject instance) {
+    jbyte result = 'a';
+    return result;
+}
+
+extern "C"
+JNIEXPORT jbyteArray JNICALL
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getByteArrayData(JNIEnv *env, jobject instance) {
+    jbyteArray result;
     return result;
 }
 
@@ -22,7 +36,7 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_basicTypeDataFromJNI(JNIEnv *en
  */
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_basicRefDataFromJNI(JNIEnv *env, jobject instance) {
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getStringData(JNIEnv *env, jobject instance) {
     jstring result = env->NewStringUTF("Hello from JNI 666");
     return result;
 }
@@ -32,7 +46,7 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_basicRefDataFromJNI(JNIEnv *env
  */
 extern "C"
 JNIEXPORT jobjectArray JNICALL
-Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_arrayRefDataFromJNI(JNIEnv *env, jobject instance) {
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getArrayRefData(JNIEnv *env, jobject instance) {
     jobjectArray result = 0;
     jsize len = 3;
     jstring str;
@@ -50,7 +64,7 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_arrayRefDataFromJNI(JNIEnv *env
  */
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_customTypeDataFromJNI(JNIEnv *env, jobject instance) {
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getRefData(JNIEnv *env, jobject instance) {
     jclass cls = env->FindClass("com/sslyxhz/ndkcourse/RefData");
     jmethodID initMid = env->GetMethodID(cls, "<init>", "()V");
     jfieldID id = env->GetFieldID(cls,"id","I");
@@ -68,7 +82,7 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_customTypeDataFromJNI(JNIEnv *e
  */
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_listDataFromJNI(JNIEnv *env, jobject instance) {
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getListData(JNIEnv *env, jobject instance) {
     jclass list_cls = env->FindClass("java/util/ArrayList");
     if(list_cls == NULL){
         return NULL;
@@ -93,7 +107,7 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_listDataFromJNI(JNIEnv *env, jo
  */
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_setDataFromJNI(JNIEnv *env, jobject instance) {
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getSetData(JNIEnv *env, jobject instance) {
     jclass hashset_cls = env->FindClass("java/util/HashSet");
     if(hashset_cls == NULL){
         return NULL;
@@ -118,7 +132,7 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_setDataFromJNI(JNIEnv *env, job
  */
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_mapDataFromJNI(JNIEnv *env, jobject instance) {
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getMapData(JNIEnv *env, jobject instance) {
     jclass hashMapClass = env->FindClass("java/util/HashMap");
     if(hashMapClass == NULL){
         return NULL;

@@ -20,29 +20,32 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 showText = new StringBuffer();
-//                showText.append(NativeTransferAdapter.testTransfer());
-//                showText.append("\n");
+                showText.append(NativeTransferAdapter.testTransfer());
+                showText.append("\n");
 //
 //                showText.append(NativeOperateAdapter.testOperate());
 //                showText.append("\n");
 
-                showText.append(NativeCostTimeAdapter.testCostTime());
-                showText.append("\n");
+//                showText.append(NativeCostTimeAdapter.testCostTime());
+//                showText.append("\n");
 
-                tv.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        tv.setText(showText.toString());
-                    }
-                });
+                showText(showText.toString().trim());
 
 //                NativeThreadsAdapter.testThreads();
 //
 //                NativeRegisterAdapter.testRegister();
             }
         }).start();
+    }
 
+    private void showText(final String text){
+        tv.post(new Runnable() {
 
+            @Override
+            public void run() {
+                tv.setText(text);
+            }
+        });
     }
 
 }

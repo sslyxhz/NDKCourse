@@ -14,63 +14,39 @@ public class NativeTransferAdapter {
     public static String testTransfer(){
         NativeTransferAdapter nativeAdapter = new NativeTransferAdapter();
         StringBuffer results = new StringBuffer();
-        results.append("basicTypeDataFromJNI() = "+ nativeAdapter.basicTypeDataFromJNI()+"\n");
-        results.append("basicRefDataFromJNI() = "+ nativeAdapter.basicRefDataFromJNI()+"\n");
-        results.append("arrayRefDataFromJNI() = "+ nativeAdapter.arrayRefDataFromJNI()+"\n");
-        results.append("customTypeDataFromJNI() = "+ nativeAdapter.customTypeDataFromJNI()+"\n");
-        results.append("listDataFromJNI().get(2) = "+ nativeAdapter.listDataFromJNI().get(2)+"\n");
-        results.append("setDataFromJNI().size() = "+ nativeAdapter.setDataFromJNI().size()+"\n");
-        results.append("mapDataFromJNI().size() = "+ nativeAdapter.mapDataFromJNI().size()+"\n");
+        results.append("getIntData() = "+ nativeAdapter.getIntData()+"\n");
+        results.append("getByteData() = "+ nativeAdapter.getByteData()+"\n");
+//        results.append("getByteArrayData().length = "+ nativeAdapter.getByteArrayData().length+"\n");
+        results.append("getStringData() = "+ nativeAdapter.getStringData()+"\n");
+        results.append("getArrayRefData().length = "+ nativeAdapter.getArrayRefData().length+"\n");
+        results.append("getRefData() = "+ nativeAdapter.getRefData()+"\n");
+        results.append("getListData().get(2) = "+ nativeAdapter.getListData().get(2)+"\n");
+        results.append("getSetData().size() = "+ nativeAdapter.getSetData().size()+"\n");
+        results.append("getMapData().size() = "+ nativeAdapter.getMapData().size()+"\n");
 
         return results.toString();
     }
 
-    /**
-     * 返回基础类型数据
-     * @return
-     */
-    public native int basicTypeDataFromJNI();
+    public native int getIntData();
 
-    /**
-     * 返回基本引用数据
-     * @return
-     */
-    public native String basicRefDataFromJNI();
+    public native byte getByteData();
 
-    /**
-     * 返回引用数组
-     * @return
-     */
-    public native String[] arrayRefDataFromJNI();
+    public native byte[] getByteArrayData();
 
-    /**
-     * 返回自定义类型数据
-     * @return
-     */
-    public native RefData customTypeDataFromJNI();
+    public native String getStringData();
 
-    /**
-     * 返回List类型数据
-     * @return
-     */
-    public native List<RefData> listDataFromJNI();
+    public native String[] getArrayRefData();
 
-    public native Set<RefData> setDataFromJNI();
+    public native RefData getRefData();
 
-    public native Map<RefData, Long> mapDataFromJNI();
+    public native List<RefData> getListData();
 
-    /**
-     * 传递基本数据类型
-     * @param param
-     * @return
-     */
+    public native Set<RefData> getSetData();
+
+    public native Map<RefData, Long> getMapData();
+
     public native String passBasicTypeData(String param);
 
-    /**
-     * 传递自定义数据类型
-     * @param param
-     * @return
-     */
     public native String passCustomTypeData(RefData param);
 
     public native String passSetData(Set<RefData> param);

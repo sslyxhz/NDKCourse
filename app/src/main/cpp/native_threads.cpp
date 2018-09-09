@@ -53,7 +53,7 @@ JNI_UnLoad(JavaVM *vm, void *reserved) {
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_sslyxhz_ndkcourse_NativeThreadsAdapter_setJNIEnv(JNIEnv *env, jobject instance) {
-    LOGI("**** Java call setJNIEnv, TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
+//    LOGI("**** Java call setJNIEnv, TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
     env->GetJavaVM(&g_jvm);         //保存全局JVM以便在子线程中使用
     g_instance = env->NewGlobalRef(instance);
 
@@ -68,7 +68,7 @@ Java_com_sslyxhz_ndkcourse_NativeThreadsAdapter_setJNIEnv(JNIEnv *env, jobject i
 
 extern "C"
 void *thread_callStaticFun(void *arg) {
-    LOGI("**** jni child thread, callStaticFun, TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
+//    LOGI("**** jni child thread, callStaticFun, TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
     JNIEnv *env;
     jclass cls;
     jmethodID staticMid;
@@ -103,7 +103,7 @@ void *thread_callStaticFun(void *arg) {
 
 extern "C"
 void *thread_callNonStaticFun(void *arg) {
-    LOGI("**** jni child thread, callNonStaticFun, TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
+//    LOGI("**** jni child thread, callNonStaticFun, TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
     JNIEnv *env;
     jclass cls;
     jmethodID ctor, mid;
@@ -145,7 +145,7 @@ void *thread_callNonStaticFun(void *arg) {
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_sslyxhz_ndkcourse_NativeThreadsAdapter_callJNIMethodInMainThread(JNIEnv *env, jobject instance) {
-    LOGI("**** Java call callJNIMethodInMainThread, TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
+//    LOGI("**** Java call callJNIMethodInMainThread, TID: %d, PID: %d", syscall(__NR_gettid), syscall(__NR_getpid));
 
     int i = 0;
     pthread_t ptStaticFunc[NUMTHREADS], ptNonStaticFunc[NUMTHREADS];
