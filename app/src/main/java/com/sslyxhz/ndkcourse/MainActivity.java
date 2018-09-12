@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.sslyxhz.ndkcourse.test.NativeTransferTester;
+
 public class MainActivity extends AppCompatActivity {
 
     TextView tv;
@@ -20,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 showText = new StringBuffer();
-                showText.append(NativeTransferAdapter.testTransfer());
-                showText.append("\n");
+//                showText.append(NativeTransferAdapter.testTransfer());
+//                showText.append("\n");
 //
 //                showText.append(NativeOperateAdapter.testOperate());
 //                showText.append("\n");
@@ -34,8 +36,14 @@ public class MainActivity extends AppCompatActivity {
 //                NativeThreadsAdapter.testThreads();
 //
 //                NativeRegisterAdapter.testRegister();
+
+
+                NativeTransferTester transferTester = new NativeTransferTester();
+                transferTester.testAll();
             }
         }).start();
+
+
     }
 
     private void showText(final String text){

@@ -10,7 +10,7 @@
 //#define LOG_TAG "native_transfer"
 
 /**
- * native返回基本数据类型
+ * native解析int参数，返回int结果
  */
 extern "C"
 JNIEXPORT jint JNICALL
@@ -21,6 +21,9 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getIntData(JNIEnv *env, jobject
 }
 
 
+/**
+ * native解析二维数组参数，返回二维数组结果
+ */
 extern "C"
 JNIEXPORT jobjectArray JNICALL
 Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getIntByteArraysData(JNIEnv *env, jobject instance, jobjectArray param) {
@@ -56,6 +59,9 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getIntByteArraysData(JNIEnv *en
 }
 
 
+/**
+ * native解析byte参数，返回byte结果
+ */
 extern "C"
 JNIEXPORT jbyte JNICALL
 Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getByteData(JNIEnv *env, jobject instance, jbyte param) {
@@ -65,12 +71,21 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getByteData(JNIEnv *env, jobjec
     return result;
 }
 
+/**
+ * native返回字节数组类型
+ */
 extern "C"
 JNIEXPORT jbyteArray JNICALL
 Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getByteArrayData(JNIEnv *env, jobject instance, jbyteArray param) {
-    jbyteArray result = param;
+    jint rows = env->GetArrayLength(param);
+    for(int i=0;i<rows; ++i) {
+        LOGI("getByteArrayData, param[%d] = %d", i, param[i]);
+    }
 
-
+    int size = 3;
+    jbyteArray result = env->NewByteArray(size);
+    jbyte* data = (jbyte *)malloc(size * sizeof(jbyte));
+    env->SetByteArrayRegion(result, 0, size, data);  // jbyte* to jbyteArray
     return result;
 }
 
@@ -80,27 +95,11 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getByteArrayData(JNIEnv *env, j
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getStringData(JNIEnv *env, jobject instance, jstring param) {
-
+    const char* content = env->GetStringUTFChars(param, 0);
+    LOGI("getStringData, param:%s", content);
+    env->DeleteLocalRef(param);
 
     jstring result = env->NewStringUTF("Hello from JNI 666");
-    return result;
-}
-
-/**
- * native返回数组类型
- */
-extern "C"
-JNIEXPORT jobjectArray JNICALL
-Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getArrayRefData(JNIEnv *env, jobject instance) {
-    jobjectArray result = 0;
-    jsize len = 3;
-    jstring str;
-
-    result = (jobjectArray)(env->NewObjectArray(len, env->FindClass("java/lang/String"), 0));
-    for(int i = 0; i < len; i++) {
-        str = env->NewStringUTF("hello ref data.");
-        env->SetObjectArrayElement(result, i, str);
-    }
     return result;
 }
 
@@ -109,17 +108,35 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getArrayRefData(JNIEnv *env, jo
  */
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getRefData(JNIEnv *env, jobject instance) {
-    jclass cls = env->FindClass("com/sslyxhz/ndkcourse/RefData");
-    jmethodID initMid = env->GetMethodID(cls, "<init>", "()V");
-    jfieldID id = env->GetFieldID(cls,"id","I");
-    jfieldID name = env->GetFieldID(cls,"name","Ljava/lang/String;");
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getRefData(JNIEnv *env, jobject instance, jobject param) {
+    jclass ref_cls = env->GetObjectClass(param);
+    if(ref_cls == NULL){
+        return env->NewStringUTF("Error, ref_cls = NULL.");
+    }
 
-    jobject obj = env->NewObject(cls,initMid);
-    env->SetIntField(obj, id, 101);
-    env->SetObjectField(obj, name,env->NewStringUTF("TestName"));
+//    jmethodID initMethidID = env->GetMethodID(ref_cls, "<init>", "(ILjava/lang/String;)V");
+    jmethodID initMethidID = env->GetMethodID(ref_cls, "<init>", "()V");
 
-    return obj;
+    jfieldID idFieldID = env->GetFieldID(ref_cls, "id", "I");
+    jfieldID nameFieldID = env->GetFieldID(ref_cls, "name", "Ljava/lang/String;");
+
+    jint id = env->GetIntField(param, idFieldID);
+    jstring name = (jstring)env->GetObjectField(param, nameFieldID);
+    const char* c_name = env->GetStringUTFChars(name, NULL);
+    LOGI("getRefData, param:<%d,%s>", id, c_name);
+    env->DeleteLocalRef(param);
+
+//    jstring name2 = env->NewStringUTF("name2hhh");
+//    jobject result = env->NewObject(ref_cls, initMethidID, id+1, name2);
+
+    jobject result = env->NewObject(ref_cls,initMethidID);
+    jstring testName = env->NewStringUTF("TestName");
+    env->SetIntField(result, idFieldID, 101);
+    env->SetObjectField(result, nameFieldID, testName);
+    env->DeleteLocalRef(testName);
+    env->DeleteLocalRef(ref_cls);
+
+    return result;
 }
 
 /**
@@ -127,7 +144,7 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getRefData(JNIEnv *env, jobject
  */
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getListData(JNIEnv *env, jobject instance) {
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getListData(JNIEnv *env, jobject instance, jobject param) {
     jclass list_cls = env->FindClass("java/util/ArrayList");
     if(list_cls == NULL){
         return NULL;
@@ -152,7 +169,10 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getListData(JNIEnv *env, jobjec
  */
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getSetData(JNIEnv *env, jobject instance) {
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getSetData(JNIEnv *env, jobject instance, jobject param) {
+
+
+
     jclass hashset_cls = env->FindClass("java/util/HashSet");
     if(hashset_cls == NULL){
         return NULL;
@@ -177,7 +197,10 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getSetData(JNIEnv *env, jobject
  */
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getMapData(JNIEnv *env, jobject instance) {
+Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getMapData(JNIEnv *env, jobject instance, jobject param) {
+
+
+
     jclass hashMapClass = env->FindClass("java/util/HashMap");
     if(hashMapClass == NULL){
         return NULL;
@@ -202,42 +225,4 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getMapData(JNIEnv *env, jobject
     }
 
     return map_obj;
-}
-
-/**
- * 传递基本类型数据
- */
-extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_passBasicTypeData(JNIEnv *env, jobject instance, jstring param_) {
-    const char *param = env->GetStringUTFChars(param_, 0);
-
-    env->ReleaseStringUTFChars(param_, param);
-
-    return env->NewStringUTF("Deal by jni..");
-}
-
-/**
- * 传递自定义类型数据
- */
-extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_passCustomTypeData(JNIEnv *env, jobject instance, jobject param) {
-    jclass ref_cls = env->GetObjectClass(param);
-    if(ref_cls == NULL){
-        return env->NewStringUTF("Error, ref_cls = NULL.");
-    }
-
-    jfieldID idFieldID = env->GetFieldID(ref_cls, "id", "I");
-    jfieldID nameFieldID = env->GetFieldID(ref_cls, "name", "Ljava/lang/String;");
-
-    jint id = env->GetIntField(param, idFieldID);
-    jstring name = (jstring)env->GetObjectField(param, nameFieldID);
-
-    const char* c_name = env->GetStringUTFChars(name, NULL);
-
-    std::string str_name = c_name;
-//    env->ReleaseStringUTFChars(name, c_name);
-
-    return env->NewStringUTF(c_name);
 }
