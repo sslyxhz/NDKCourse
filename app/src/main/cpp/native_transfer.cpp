@@ -145,23 +145,32 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getRefData(JNIEnv *env, jobject
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getListData(JNIEnv *env, jobject instance, jobject param) {
-    jclass list_cls = env->FindClass("java/util/ArrayList");
-    if(list_cls == NULL){
+    jclass listClass = env->FindClass("java/util/ArrayList");
+    if(listClass == NULL){
         return NULL;
     }
-    jmethodID init_list_mid = env->GetMethodID(list_cls, "<init>", "()V");
-    jmethodID add_list_mid = env->GetMethodID(list_cls, "add", "(Ljava/lang/Object;)Z");
-    jobject list_obj = env->NewObject(list_cls, init_list_mid);
+    jmethodID init_list_mid = env->GetMethodID(listClass, "<init>", "()V");
+    jmethodID add_list_mid = env->GetMethodID(listClass, "add", "(Ljava/lang/Object;)Z");
+    jmethodID get_list_mid = env->GetMethodID(listClass, "get", "(I)Ljava/lang/Object;");
+    jmethodID size_list_mid = env->GetMethodID(listClass, "size", "()I");
 
-    jclass ref_cls = env->FindClass("com/sslyxhz/ndkcourse/RefData");
-    jmethodID init_ref_mid = env->GetMethodID(ref_cls, "<init>", "(ILjava/lang/String;)V");
-
-    for(int i=0;i<3;++i){
-        jstring testName = env->NewStringUTF("TestName");
-        jobject testRefData = env->NewObject(ref_cls, init_ref_mid, i, testName);
-        env->CallBooleanMethod(list_obj, add_list_mid, testRefData);
+    int len = env->CallIntMethod(param, size_list_mid);
+    for (int i = 0; i < len; ++i) {
+        jstring jvalue = (jstring)env->CallObjectMethod(param, get_list_mid, i);
+        const char* cvalue = env->GetStringUTFChars(jvalue, 0);
+        LOGI("getListData, param item:%s", cvalue);
+        env->DeleteLocalRef(jvalue);
     }
-    return list_obj;
+
+    int size = 3;
+    jobject result = env->NewObject(listClass, init_list_mid);
+    for(int i=0;i<size;++i){
+        jstring testName = env->NewStringUTF("TestName");
+        env->CallBooleanMethod(result, add_list_mid, testName);
+        env->DeleteLocalRef(testName);
+    }
+    env->DeleteLocalRef(listClass);
+    return result;
 }
 
 /**
@@ -170,26 +179,36 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getListData(JNIEnv *env, jobjec
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getSetData(JNIEnv *env, jobject instance, jobject param) {
-
-
-
-    jclass hashset_cls = env->FindClass("java/util/HashSet");
-    if(hashset_cls == NULL){
+    jclass hashSetClass = env->FindClass("java/util/HashSet");
+    jclass iteratorClass = env->FindClass("java/util/Iterator");
+    if(hashSetClass == NULL || iteratorClass == NULL){
         return NULL;
     }
-    jmethodID init_set_mid = env->GetMethodID(hashset_cls, "<init>", "()V");
-    jmethodID add_set_mid = env->GetMethodID(hashset_cls, "add", "(Ljava/lang/Object;)Z");
-    jobject set_obj = env->NewObject(hashset_cls, init_set_mid);
+    jmethodID init_set_mid = env->GetMethodID(hashSetClass, "<init>", "()V");
+    jmethodID add_set_mid = env->GetMethodID(hashSetClass, "add", "(Ljava/lang/Object;)Z");
+    jmethodID iterator_set_mid = env->GetMethodID(hashSetClass, "iterator", "()Ljava/util/Iterator;");
 
-    jclass ref_cls = env->FindClass("com/sslyxhz/ndkcourse/RefData");
-    jmethodID init_ref_mid = env->GetMethodID(ref_cls, "<init>", "(ILjava/lang/String;)V");
+    jmethodID hasNext_iter_mid = env->GetMethodID(iteratorClass, "hasNext", "()Z");
+    jmethodID next_iter_mid = env->GetMethodID(iteratorClass, "next", "()Ljava/lang/Object;");
 
-    for(int i=0;i<3;++i){
-        jstring testName = env->NewStringUTF("TestName");
-        jobject testRefData = env->NewObject(ref_cls, init_ref_mid, i, testName);
-        env->CallBooleanMethod(set_obj, add_set_mid, testRefData);
+    jobject iter_obj = env->CallObjectMethod(param, iterator_set_mid);
+    while(env->CallBooleanMethod(iter_obj, hasNext_iter_mid)) {
+        jstring jvalue = (jstring) env->CallObjectMethod(iter_obj, next_iter_mid);
+        const char* cvalue = env->GetStringUTFChars(jvalue, 0);
+        LOGI("getSetData, param item:%s", cvalue);
+        env->DeleteLocalRef(jvalue);
     }
-    return set_obj;
+
+    jobject result = env->NewObject(hashSetClass, init_set_mid);
+    int size = 3;
+    for(int i=0;i<size;++i){
+        jstring testName = env->NewStringUTF("TestNameFromC++");
+        env->CallBooleanMethod(result, add_set_mid, testName);
+        env->DeleteLocalRef(testName);
+    }
+    env->DeleteLocalRef(hashSetClass);
+    env->DeleteLocalRef(iteratorClass);
+    return result;
 }
 
 /**
@@ -198,31 +217,38 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getSetData(JNIEnv *env, jobject
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getMapData(JNIEnv *env, jobject instance, jobject param) {
-
-
-
     jclass hashMapClass = env->FindClass("java/util/HashMap");
+    jclass iteratorClass = env->FindClass("java/util/Iterator");
     if(hashMapClass == NULL){
         return NULL;
     }
     jmethodID init_map_mid = env->GetMethodID(hashMapClass, "<init>", "()V");
     jmethodID put_map_mid = env->GetMethodID(hashMapClass, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
-    jobject map_obj = env->NewObject(hashMapClass, init_map_mid);
+    jmethodID get_map_mid = env->GetMethodID(hashMapClass, "get", "(Ljava/lang/Object;)Ljava/lang/Object;");
+//    jmethodID iterator_map_mid = env->GetMethodID(hashMapClass, "iterator", "()Ljava/util/Iterator;");
 
-    jclass ref_cls = env->FindClass("com/sslyxhz/ndkcourse/RefData");
-    jmethodID init_ref_mid = env->GetMethodID(ref_cls, "<init>", "(ILjava/lang/String;)V");
-    jclass long_cls = env->FindClass("java/lang/Long");
-    jmethodID longInitMethod = env->GetStaticMethodID(long_cls, "valueOf", "(J)Ljava/lang/Long;");
+    jmethodID hasNext_iter_mid = env->GetMethodID(iteratorClass, "hasNext", "()Z");
+    jmethodID next_iter_mid = env->GetMethodID(iteratorClass, "next", "()Ljava/lang/Object;");
 
+//    jobject iter_obj = env->CallObjectMethod(param, iterator_map_mid);
+//    while(env->CallBooleanMethod(iter_obj, hasNext_iter_mid)) {
+//        jstring jMapKey = (jstring) env->CallObjectMethod(iter_obj, next_iter_mid);
+//        const char* cvalue = env->GetStringUTFChars(jvalue, 0);
+//        LOGI("getSetData, param item:%s", cvalue);
+//        env->DeleteLocalRef(jvalue);
+//    }
+
+    jobject result = env->NewObject(hashMapClass, init_map_mid);
     for(int i=0;i<3;++i){
-        jstring testName = env->NewStringUTF("TestName");
-        jobject testRefData = env->NewObject(ref_cls, init_ref_mid, i, testName);
-        jobject testData = env->CallStaticObjectMethod(long_cls, longInitMethod, i);
-        env->CallObjectMethod(map_obj, put_map_mid, testRefData, testData);
+        jstring testKey = env->NewStringUTF("TestKey");
+        jstring testValue = env->NewStringUTF("TestValue");
+        env->CallObjectMethod(result, put_map_mid, testKey, testValue);
 
-        env->DeleteLocalRef(testRefData);
-        env->DeleteLocalRef(testData);
+        env->DeleteLocalRef(testKey);
+        env->DeleteLocalRef(testValue);
     }
+    env->DeleteLocalRef(hashMapClass);
+    env->DeleteLocalRef(iteratorClass);
 
-    return map_obj;
+    return result;
 }

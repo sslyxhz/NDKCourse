@@ -59,9 +59,9 @@ public class NativeTransferAdapter {
 
     public native List<String> getListData(List<String> param);
 
-    public native Set<RefData> getSetData(Set<RefData> param);
+    public native Set<String> getSetData(Set<String> param);
 
-    public native Map<RefData, Long> getMapData(Map<RefData, Long> param);
+    public native Map<String, String> getMapData(Map<String, String> param);
 
     static {
         System.loadLibrary("native-transfer");

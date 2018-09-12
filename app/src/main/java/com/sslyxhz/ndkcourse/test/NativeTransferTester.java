@@ -6,7 +6,11 @@ import com.sslyxhz.ndkcourse.NativeTransferAdapter;
 import com.sslyxhz.ndkcourse.RefData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class NativeTransferTester {
     private static final String TAG = NativeTransferTester.class.getSimpleName();
@@ -82,10 +86,17 @@ public class NativeTransferTester {
     }
 
     private void testGetSetData(){
-
+        Set<String> param = new HashSet<>();
+        param.add("TestItem1");
+        param.add("TestItem2");
+        Set<String> result = mAdapter.getSetData(param);
     }
 
     private void testGetMapData(){
+        Map<String, String> param = new HashMap<>();
+        param.put("TestKey1", "TestItem1");
+        param.put("TestKey2", "TestItem2");
+        Map<String, String> result = mAdapter.getMapData(param);
 
     }
 }
