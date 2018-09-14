@@ -8,6 +8,7 @@ import com.sslyxhz.ndkcourse.RefData;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -98,5 +99,7 @@ public class NativeTransferTester {
         param.put("TestKey2", "TestItem2");
         Map<String, String> result = mAdapter.getMapData(param);
 
+        Set<String> keyset = param.keySet();
+        Iterator<String> iterator = keyset.iterator();
     }
 }

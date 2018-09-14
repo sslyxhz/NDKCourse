@@ -95,7 +95,7 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getByteArrayData(JNIEnv *env, j
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getStringData(JNIEnv *env, jobject instance, jstring param) {
-    const char* content = env->GetStringUTFChars(param, 0);
+    const char* content = env->GetStringUTFChars(param, JNI_FALSE);
     LOGI("getStringData, param:%s", content);
     env->DeleteLocalRef(param);
 
@@ -157,7 +157,7 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getListData(JNIEnv *env, jobjec
     int len = env->CallIntMethod(param, size_list_mid);
     for (int i = 0; i < len; ++i) {
         jstring jvalue = (jstring)env->CallObjectMethod(param, get_list_mid, i);
-        const char* cvalue = env->GetStringUTFChars(jvalue, 0);
+        const char* cvalue = env->GetStringUTFChars(jvalue, JNI_FALSE);
         LOGI("getListData, param item:%s", cvalue);
         env->DeleteLocalRef(jvalue);
     }
@@ -194,7 +194,7 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getSetData(JNIEnv *env, jobject
     jobject iter_obj = env->CallObjectMethod(param, iterator_set_mid);
     while(env->CallBooleanMethod(iter_obj, hasNext_iter_mid)) {
         jstring jvalue = (jstring) env->CallObjectMethod(iter_obj, next_iter_mid);
-        const char* cvalue = env->GetStringUTFChars(jvalue, 0);
+        const char* cvalue = env->GetStringUTFChars(jvalue, JNI_FALSE);
         LOGI("getSetData, param item:%s", cvalue);
         env->DeleteLocalRef(jvalue);
     }
@@ -218,25 +218,43 @@ extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getMapData(JNIEnv *env, jobject instance, jobject param) {
     jclass hashMapClass = env->FindClass("java/util/HashMap");
+    jclass setClass = env->FindClass("java/util/Set");
     jclass iteratorClass = env->FindClass("java/util/Iterator");
-    if(hashMapClass == NULL){
+    if(hashMapClass == NULL || iteratorClass == NULL){
         return NULL;
     }
+
     jmethodID init_map_mid = env->GetMethodID(hashMapClass, "<init>", "()V");
     jmethodID put_map_mid = env->GetMethodID(hashMapClass, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
     jmethodID get_map_mid = env->GetMethodID(hashMapClass, "get", "(Ljava/lang/Object;)Ljava/lang/Object;");
-//    jmethodID iterator_map_mid = env->GetMethodID(hashMapClass, "iterator", "()Ljava/util/Iterator;");
+    jmethodID keySet_map_mid = env->GetMethodID(hashMapClass, "keySet", "()Ljava/util/Set;");
+
+    jmethodID iterator_set_mid = env->GetMethodID(setClass, "iterator", "()Ljava/util/Iterator;");
 
     jmethodID hasNext_iter_mid = env->GetMethodID(iteratorClass, "hasNext", "()Z");
     jmethodID next_iter_mid = env->GetMethodID(iteratorClass, "next", "()Ljava/lang/Object;");
 
-//    jobject iter_obj = env->CallObjectMethod(param, iterator_map_mid);
-//    while(env->CallBooleanMethod(iter_obj, hasNext_iter_mid)) {
-//        jstring jMapKey = (jstring) env->CallObjectMethod(iter_obj, next_iter_mid);
-//        const char* cvalue = env->GetStringUTFChars(jvalue, 0);
-//        LOGI("getSetData, param item:%s", cvalue);
-//        env->DeleteLocalRef(jvalue);
-//    }
+
+    jobject jKeySet = env->CallObjectMethod(param, keySet_map_mid);
+    jobject jIterarot = env->CallObjectMethod(jKeySet, iterator_set_mid);
+    while(env->CallBooleanMethod(jIterarot, hasNext_iter_mid)) {
+        jstring jHashMapKey = (jstring) env->CallObjectMethod(jIterarot, next_iter_mid);
+        jstring jHashMapValue = (jstring) env->CallObjectMethod(param, get_map_mid, jHashMapKey);
+
+        const char *strKey = env->GetStringUTFChars(jHashMapKey, JNI_FALSE);
+        const char *strValue = env->GetStringUTFChars(jHashMapValue, JNI_FALSE);
+
+        LOGI("getMapData, param <%s, %s>", strKey, strValue);
+
+//        env->ReleaseStringUTFChars(jHashMapKey, strKey);
+//        env->ReleaseStringUTFChars(jHashMapValue, strValue);
+        env->DeleteLocalRef(jHashMapKey);
+        env->DeleteLocalRef(jHashMapValue);
+    }
+    env->DeleteLocalRef(jKeySet);
+    env->DeleteLocalRef(jIterarot);
+    env->DeleteLocalRef(setClass);
+    env->DeleteLocalRef(iteratorClass);
 
     jobject result = env->NewObject(hashMapClass, init_map_mid);
     for(int i=0;i<3;++i){
@@ -248,7 +266,6 @@ Java_com_sslyxhz_ndkcourse_NativeTransferAdapter_getMapData(JNIEnv *env, jobject
         env->DeleteLocalRef(testValue);
     }
     env->DeleteLocalRef(hashMapClass);
-    env->DeleteLocalRef(iteratorClass);
 
     return result;
 }
