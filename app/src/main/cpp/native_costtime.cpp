@@ -6,7 +6,6 @@
 #include <string>
 #include <sys/time.h>
 #include "logger.h"
-#include "native_costtime.h"
 
 long getCurrentTime();
 void jni2jniVoid();
@@ -33,7 +32,7 @@ Java_com_sslyxhz_ndkcourse_NativeCostTimeAdapter_nativeJni2JavaVoid(JNIEnv *env,
         env->CallVoidMethod(objAdapter, test_mid);
     }
     long costTime = getCurrentTime() - startTime;
-    LOGI("nativeJni2JavaVoid, cost time = %ld", costTime);
+    LOGI("nativeJni2JavaVoid, cost time = %ld, times:%d", costTime, TEST_TIMES);
 
     env->DeleteLocalRef(objAdapter);
 }
@@ -49,7 +48,7 @@ Java_com_sslyxhz_ndkcourse_NativeCostTimeAdapter_nativeJni2JniVoid(JNIEnv *env, 
         jni2jniVoid();
     }
     long costTime = getCurrentTime() - startTime;
-    LOGI("nativeJni2JniVoid, cost time = %ld", costTime);
+    LOGI("nativeJni2JniVoid, cost time = %ld, test times:%d", costTime, TEST_TIMES);
 
 }
 

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.sslyxhz.ndkcourse.test.NativeCostTimeTester;
 import com.sslyxhz.ndkcourse.test.NativeTransferTester;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
 //
 //                NativeRegisterAdapter.testRegister();
 
+
+                NativeCostTimeTester costTimeTester = new NativeCostTimeTester();
+                costTimeTester.testAll();
 
                 NativeTransferTester transferTester = new NativeTransferTester();
                 transferTester.testAll();

@@ -1,8 +1,5 @@
 package com.sslyxhz.ndkcourse;
 
-import android.util.Log;
-
-import java.lang.annotation.Native;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -57,11 +54,27 @@ public class NativeTransferAdapter {
      */
     public native RefData getRefData(RefData param);
 
+    /**
+     * 传递List数据
+     * @param param
+     * @return
+     */
     public native List<String> getListData(List<String> param);
 
+    /**
+     * 传递Set数据
+     * @param param
+     * @return
+     */
     public native Set<String> getSetData(Set<String> param);
 
+    /**
+     * 传递Map数据
+     * @param param
+     * @return
+     */
     public native Map<String, String> getMapData(Map<String, String> param);
+
 
     static {
         System.loadLibrary("native-transfer");
