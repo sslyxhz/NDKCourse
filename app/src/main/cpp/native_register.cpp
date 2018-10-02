@@ -11,10 +11,13 @@
 
 jclass g_registerAdapter;
 
-void native_testRegisterMethod(JNIEnv *env, jobject obj);
 
 static JNINativeMethod gNatvieMethods[] = {
-        {"testRegisterMethod",             "()V",                             (void *) native_testRegisterMethod},
+        {
+                "testRegisterMethod",
+                "()V",
+                (void *) native_testRegisterMethod
+        },
 };
 
 extern "C"
@@ -29,8 +32,10 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
         return result;
     }
 
-    g_registerAdapter = (jclass)env->NewGlobalRef((jobject)env->FindClass("com/sslyxhz/ndkcourse/NativeRegisterAdapter"));
+    jclass jAdapterClz = env->FindClass("com/sslyxhz/ndkcourse/NativeRegisterAdapter");
+    g_registerAdapter = (jclass) env->NewGlobalRef((jobject)jAdapterClz);
     env->RegisterNatives(g_registerAdapter, gNatvieMethods, sizeof(gNatvieMethods)/ sizeof(JNINativeMethod));
+    env->DeleteLocalRef(jAdapterClz);
     return JNI_VERSION_1_6;
 }
 

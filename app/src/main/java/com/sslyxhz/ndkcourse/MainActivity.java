@@ -35,9 +35,6 @@ public class MainActivity extends AppCompatActivity {
                 showText(showText.toString().trim());
 
 //                NativeThreadsAdapter.testThreads();
-//
-//                NativeRegisterAdapter.testRegister();
-
 
                 NativeCostTimeTester costTimeTester = new NativeCostTimeTester();
                 costTimeTester.testAll();
